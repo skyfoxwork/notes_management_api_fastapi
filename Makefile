@@ -6,6 +6,7 @@
 # Run FastAPI app
 run:
 	uvicorn src.main:app --reload
+# 	uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 
 # check code with flake8
 lint:
@@ -14,3 +15,12 @@ lint:
 # install Python modules
 install:
 	pip install -r requirements.txt
+
+# Run Alembic migrations
+migrate:
+	alembic revision --autogenerate
+# 	alembic revision --autogenerate -m "New migration"
+
+# upgrade database schemas
+upgrade:
+	alembic upgrade head
