@@ -8,7 +8,7 @@ from sqlalchemy.sql.functions import coalesce
 
 from src.database.session_postgresql import get_db
 from src.database.models.notes import Note, NoteVersion
-from src.schemas.notes import NoteCreateSchema, NoteSchema, NoteSchemaDetail, NoteUpdateCreateVersionSchema
+from src.schemas.notes import NoteCreateSchema, NoteSchema, NoteSchemaDetail, NoteUpdateVersionCreateSchema
 
 
 router = APIRouter()
@@ -52,16 +52,18 @@ async def create_note(note: NoteCreateSchema, db: AsyncSession = Depends(get_db)
 @router.delete("/{note_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_note(note_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
     result = await db.execute(delete(Note).where(Note.id == note_id))
+
     if result.rowcount == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Note with the given UUID was not found."
         )
+
     await db.commit()
 
 
 @router.patch("/{note_id}/", response_model=NoteSchema, status_code=status.HTTP_200_OK)
-async def update_note(data: NoteUpdateCreateVersionSchema, note_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
+async def update_note(data: NoteUpdateVersionCreateSchema, note_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
     note = await db.get(Note, note_id)
 
     if not note:
