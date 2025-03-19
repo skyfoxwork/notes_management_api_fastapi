@@ -22,7 +22,7 @@ class Note(Base):
     )
 
     def __repr__(self):
-        return f"id: {self.id}, title: {self.title}"
+        return f"<NoteModel id: {self.id}, title: {self.title}>"
 
 
 class NoteVersion(Base):
@@ -37,4 +37,4 @@ class NoteVersion(Base):
     note: Mapped["Note"] = relationship(back_populates="versions")
 
     def __repr__(self):
-        return f"id: {self.id}, note_id: {self.note_id} version: {self.version}"
+        return f"<NoteVersionModel id: {self.id}, note_id: {self.note_id} version: {self.version}>"
