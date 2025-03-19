@@ -12,3 +12,5 @@ class Settings:
     POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "test_host")
     POSTGRES_DB_PORT: int = int(os.getenv("POSTGRES_DB_PORT", 5432))
     POSTGRES_DB: str = os.getenv("POSTGRES_DB_NAME", "test_db")
+
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
