@@ -11,7 +11,7 @@ from src.database.models.notes import Note
 router = APIRouter()
 
 
-@router.get("/{note_id}/")
+@router.get("/{note_id}/", status_code=status.HTTP_200_OK)
 async def get_note_summary(note_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
     note = await db.get(Note, note_id)
 
@@ -21,4 +21,4 @@ async def get_note_summary(note_id: uuid.UUID, db: AsyncSession = Depends(get_db
     prompt = f"Summarize this note: {note.content}"
     response = await get_summarize_note_genai(prompt)
 
-    return {"summary": response.text}
+    return {"id": note_id, "summary": response.text}
