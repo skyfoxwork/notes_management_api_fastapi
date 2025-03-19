@@ -31,5 +31,5 @@ class NoteCreateSchema(NoteBaseSchema):
     pass
 
 
-class NoteUpdateCreateVersionSchema(BaseModel):
+class NoteUpdateVersionCreateSchema(BaseModel):
     content: str
