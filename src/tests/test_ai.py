@@ -39,4 +39,4 @@ async def test_get_note_summary_not_found(client, mocker):
     response = await client.get(f"/api/v1/summarize/{note_id}/")
 
     assert response.status_code == 404
-    assert response.json() == {"detail": "Not found."}
+    assert response.json() == {"detail": "Not found"}
