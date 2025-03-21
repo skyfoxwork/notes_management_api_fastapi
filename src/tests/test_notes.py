@@ -6,7 +6,6 @@ from src.database.models.notes import Note
 @pytest.mark.asyncio
 async def test_empty_note(client):
     response = await client.get("/api/v1/notes/")
-    print("-*" * 50, response.json())
     assert response.status_code == 404
     assert response.json() == {"detail": "No notes found."}
 
