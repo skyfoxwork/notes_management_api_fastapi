@@ -36,6 +36,7 @@ nltk==3.9.1
 numpy==2.2.4
 packaging==24.2
 pandas==2.2.3
+passlib==1.7.4
 pip-autoremove==0.10.0
 pluggy==1.5.0
 proto-plus==1.26.1
