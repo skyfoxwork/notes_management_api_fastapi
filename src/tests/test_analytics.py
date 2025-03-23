@@ -13,13 +13,22 @@ async def test_get_notes_analytics_success(
         jwt_manager: JWTAuthManager
 ):
     """
-    Test the success scenario when notes are present and analytics are generated correctly.
+    Test the success scenario when notes are present
+    and analytics are generated correctly.
     """
 
     user = await create_user(db_session)
 
-    note_1 = Note(title="Test Note 1", content="Content of note 1", user_id=user.id)
-    note_2 = Note(title="Test Note 2", content="Content of note 2", user_id=user.id)
+    note_1 = Note(
+        title="Test Note 1",
+        content="Content of note 1",
+        user_id=user.id
+    )
+    note_2 = Note(
+        title="Test Note 2",
+        content="Content of note 2",
+        user_id=user.id
+    )
 
     db_session.add(note_1)
     db_session.add(note_2)
@@ -28,7 +37,10 @@ async def test_get_notes_analytics_success(
 
     token = generate_token(user.id, jwt_manager)
 
-    response = await client.get("/api/v1/analytics/", headers={"Authorization": f"Bearer {token}"})
+    response = await client.get(
+        "/api/v1/analytics/",
+        headers={"Authorization": f"Bearer {token}"}
+    )
 
     assert response.status_code == 200
     response_data = response.json()
@@ -49,19 +61,20 @@ async def test_get_notes_analytics_success(
 
     assert isinstance(response_data["most_common_words"], list)
     assert (
-        all(isinstance(word_pair, list) and
-            len(word_pair) == 2 for word_pair in response_data["most_common_words"])
+        all(isinstance(word_pair, list)
+            and len(word_pair) == 2
+            for word_pair in response_data["most_common_words"])
     )
     assert isinstance(response_data["top_3_longest_notes"], list)
     assert (
-        all(isinstance(note, dict) and
-            "id" in note and "word_count" in
+        all(isinstance(note, dict)
+            and "id" in note and "word_count" in
             note for note in response_data["top_3_longest_notes"])
     )
     assert isinstance(response_data["top_3_shortest_notes"], list)
     assert (
-        all(isinstance(note, dict) and
-            "id" in note and "word_count" in
+        all(isinstance(note, dict)
+            and "id" in note and "word_count" in
             note for note in response_data["top_3_shortest_notes"])
     )
 
@@ -81,7 +94,10 @@ async def test_get_notes_analytics_not_found(
 
     token = generate_token(user.id, jwt_manager)
 
-    response = await client.get("/api/v1/analytics/", headers={"Authorization": f"Bearer {token}"})
+    response = await client.get(
+        "/api/v1/analytics/",
+        headers={"Authorization": f"Bearer {token}"}
+    )
 
     assert response.status_code == 404
     assert response.json() == {"detail": "Not found"}

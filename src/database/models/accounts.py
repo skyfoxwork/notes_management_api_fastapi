@@ -32,10 +32,16 @@ class UserGroupEnum(str, enum.Enum):
 class UserGroupModel(Base):
     __tablename__ = "user_groups"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[UserGroupEnum] = mapped_column(Enum(UserGroupEnum), nullable=False, unique=True)
+    id: Mapped[int] = mapped_column(
+        Integer, primary_key=True, autoincrement=True
+    )
+    name: Mapped[UserGroupEnum] = mapped_column(
+        Enum(UserGroupEnum), nullable=False, unique=True
+    )
 
-    users: Mapped[List["UserModel"]] = relationship("UserModel", back_populates="group")
+    users: Mapped[List["UserModel"]] = relationship(
+        "UserModel", back_populates="group"
+    )
 
     def __repr__(self):
         return f"<UserGroupModel(id={self.id}, name={self.name})>"
@@ -63,8 +69,11 @@ class UserModel(Base):
         cascade="all, delete-orphan"
     )
 
-    notes: Mapped[List["Note"]] = relationship("Note", back_populates="user",
-                                                                 cascade="all, delete-orphan")
+    notes: Mapped[List["Note"]] = relationship(
+        "Note",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<UserModel(id={self.id}, email={self.email})>"

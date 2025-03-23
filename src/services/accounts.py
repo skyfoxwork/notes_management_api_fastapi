@@ -6,7 +6,10 @@ from src.exceptions.security import BaseSecurityError
 from src.security.token_manager import JWTAuthManagerInterface
 
 
-def get_user_id_or_unauthorized(jwt_manager: JWTAuthManagerInterface, token: str) -> uuid.UUID:
+def get_user_id_or_unauthorized(
+        jwt_manager: JWTAuthManagerInterface,
+        token: str
+) -> uuid.UUID:
     try:
         payload = jwt_manager.decode_access_token(token)
         user_id = payload.get("user_id")

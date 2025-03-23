@@ -5,7 +5,10 @@ from sqlalchemy import text
 
 from src.config.settings import Settings
 from src.main import app
-from src.database.session_sqlite import init_db, get_sqlite_db_contextmanager
+from src.database.session_sqlite import (
+    init_db,
+    get_sqlite_db_contextmanager
+)
 from src.database.session_postgresql import get_db
 from src.database.session_sqlite import get_sqlite_db
 from src.security.token_manager import JWTAuthManager

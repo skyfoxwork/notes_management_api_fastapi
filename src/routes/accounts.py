@@ -257,7 +257,9 @@ async def refresh_access_token(
             detail=str(error),
         )
 
-    db_result_refresh_token_record = await db.execute(select(RefreshTokenModel).filter_by(token=token_data.refresh_token))
+    db_result_refresh_token_record = await db.execute(
+        select(RefreshTokenModel).filter_by(token=token_data.refresh_token)
+    )
     refresh_token_record = db_result_refresh_token_record.scalars().first()
 
     if not refresh_token_record:

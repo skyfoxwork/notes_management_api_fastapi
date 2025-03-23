@@ -7,8 +7,8 @@ from alembic import context
 
 # my imports
 import asyncio
-from src.database.models import notes # noqa: F401
-from src.database.models import accounts # noqa: F401
+from src.database.models import notes  # noqa: F401
+from src.database.models import accounts  # noqa: F401
 from src.database.session_postgresql import postgresql_engine
 from src.database.models.base import Base
 

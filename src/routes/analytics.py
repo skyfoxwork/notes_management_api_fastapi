@@ -7,7 +7,7 @@ from src.database.models.notes import Note
 from src.services.analytics import get_analyze_notes
 
 
-router =  APIRouter()
+router = APIRouter()
 
 
 @router.get("/")

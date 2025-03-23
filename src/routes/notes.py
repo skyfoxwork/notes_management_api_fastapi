@@ -18,7 +18,11 @@ from src.services.accounts import get_user_id_or_unauthorized
 router = APIRouter()
 
 
-@router.get("/", response_model=list[NoteSchema], status_code=status.HTTP_200_OK)
+@router.get(
+    "/",
+    response_model=list[NoteSchema],
+    status_code=status.HTTP_200_OK
+)
 async def get_list_of_notes(
         jwt_manager: JWTAuthManagerInterface = Depends(get_jwt_auth_manager),
         token: str = Depends(get_token),
@@ -35,7 +39,11 @@ async def get_list_of_notes(
     return notes
 
 
-@router.get("/{note_id}/", response_model=NoteSchemaDetail, status_code=status.HTTP_200_OK)
+@router.get(
+    "/{note_id}/",
+    response_model=NoteSchemaDetail,
+    status_code=status.HTTP_200_OK
+)
 async def get_note_by_id(
         note_id: uuid.UUID,
         db: AsyncSession = Depends(get_db),
@@ -57,7 +65,11 @@ async def get_note_by_id(
     return note
 
 
-@router.post("/", response_model=NoteSchema, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/",
+    response_model=NoteSchema,
+    status_code=status.HTTP_201_CREATED
+)
 async def create_note(
         note: NoteCreateSchema,
         db: AsyncSession = Depends(get_db),
@@ -100,7 +112,7 @@ async def update_note(
         token: str = Depends(get_token),
         jwt_manager: JWTAuthManagerInterface = Depends(get_jwt_auth_manager),
 ):
-    user_id = get_user_id_or_unauthorized(jwt_manager=jwt_manager, token=token)
+    get_user_id_or_unauthorized(jwt_manager=jwt_manager, token=token)
 
     note = await db.get(Note, note_id)
 
