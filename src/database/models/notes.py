@@ -12,6 +12,7 @@ class Note(Base):
     __tablename__ = "notes"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
@@ -20,6 +21,7 @@ class Note(Base):
     versions: Mapped[list["NoteVersion"]] = relationship(
         back_populates="note", cascade="all, delete-orphan"
     )
+    user: Mapped["UserModel"] = relationship("UserModel", back_populates="notes")
 
     def __repr__(self):
         return f"<NoteModel id: {self.id}, title: {self.title}>"
