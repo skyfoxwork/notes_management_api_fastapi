@@ -14,3 +14,9 @@ class Settings:
     POSTGRES_DB: str = os.getenv("POSTGRES_DB_NAME", "test_db")
 
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+    SECRET_KEY_ACCESS: str = os.getenv("SECRET_KEY_ACCESS", os.urandom(32))
+    SECRET_KEY_REFRESH: str = os.getenv("SECRET_KEY_REFRESH", os.urandom(32))
+    JWT_SIGNING_ALGORITHM: str = os.getenv("JWT_SIGNING_ALGORITHM", "HS256")
+
+    LOGIN_TIME_DAYS: int = 7
