@@ -2,18 +2,38 @@ import uuid
 
 import pytest
 from unittest.mock import AsyncMock
+from httpx import AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models.notes import Note
+from src.database.models.accounts import UserModel, UserGroupModel,UserGroupEnum
 
 
 @pytest.mark.asyncio
-async def test_get_note_summary(client, mocker, db_session):
+async def test_get_note_summary(client: AsyncClient , mocker, db_session: AsyncSession):
     """
     The test to get a note summary with mocking an external API.
     """
+    user_group = UserGroupModel(name=UserGroupEnum.USER)
+    db_session.add(user_group)
 
-    note = Note(title="Test title", content="Test content")
+    await db_session.commit()
+    await db_session.refresh(user_group)
+
+    user = UserModel.create(
+        email="test@test.com",
+        raw_password="Test_password12345@",
+        group_id=user_group.id,
+    )
+
+    db_session.add(user)
+
+    await db_session.commit()
+    await db_session.refresh(user)
+
+    note = Note(title="Test title", content="Test content", user_id=user.id)
     db_session.add(note)
+
     await db_session.commit()
     await db_session.refresh(note)
 
@@ -31,7 +51,7 @@ async def test_get_note_summary(client, mocker, db_session):
 
 
 @pytest.mark.asyncio
-async def test_get_note_summary_not_found(client, mocker):
+async def test_get_note_summary_not_found(client: AsyncClient, mocker):
     """The test to get an error if a note is not found."""
 
     # Request with invalid ID
