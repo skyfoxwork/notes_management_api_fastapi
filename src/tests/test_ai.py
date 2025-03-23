@@ -6,11 +6,19 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models.notes import Note
-from src.database.models.accounts import UserModel, UserGroupModel,UserGroupEnum
+from src.database.models.accounts import (
+    UserModel,
+    UserGroupModel,
+    UserGroupEnum
+)
 
 
 @pytest.mark.asyncio
-async def test_get_note_summary(client: AsyncClient , mocker, db_session: AsyncSession):
+async def test_get_note_summary(
+        client: AsyncClient ,
+        mocker,
+        db_session: AsyncSession
+):
     """
     The test to get a note summary with mocking an external API.
     """
@@ -42,12 +50,17 @@ async def test_get_note_summary(client: AsyncClient , mocker, db_session: AsyncS
     mock_response.text = "This is a summarized note."
 
     # Mock get_summarize_note_genai function
-    mocker.patch("src.routes.ai.get_summarize_note_genai", return_value=mock_response)
+    mocker.patch(
+        "src.routes.ai.get_summarize_note_genai", return_value=mock_response
+    )
 
     response = await client.get(f"/api/v1/summarize/{note.id}/")
 
     assert response.status_code == 200
-    assert response.json() == {"id": str(note.id), "summary": "This is a summarized note."}
+    assert response.json() == {
+        "id": str(note.id),
+        "summary": "This is a summarized note."
+    }
 
 
 @pytest.mark.asyncio

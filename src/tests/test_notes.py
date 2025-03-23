@@ -5,9 +5,15 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database.models.accounts import UserModel, UserGroupModel, UserGroupEnum
+from src.database.models.accounts import (
+    UserModel,
+    UserGroupModel,
+    UserGroupEnum
+)
 from src.database.models.notes import Note, NoteVersion
 from src.security.token_manager import JWTAuthManager
+from src.tests.utils import create_user, generate_token
+
 
 
 def generate_token(user_id, jwt_manager):
@@ -47,7 +53,9 @@ async def test_empty_note(
     user = await create_user(db_session)
 
     token = generate_token(user.id, jwt_manager)
-    response = await client.get("/api/v1/notes/", headers={"Authorization": f"Bearer {token}"})
+    response = await client.get(
+        "/api/v1/notes/", headers={"Authorization": f"Bearer {token}"}
+    )
 
     assert response.status_code == 404
     assert response.json() == {"detail": "No notes found."}
@@ -61,18 +69,24 @@ async def test_create_and_read_note(
 ):
     user = await create_user(db_session)
 
-    note = Note(title="Test Note", content="This is a test note", user_id=user.id)
+    note = Note(
+        title="Test Note", content="This is a test note", user_id=user.id
+    )
     db_session.add(note)
 
     await db_session.commit()
     await db_session.refresh(note)
 
     token = generate_token(user.id, jwt_manager)
-    response = await client.get("/api/v1/notes/", headers={"Authorization": f"Bearer {token}"})
+    response = await client.get(
+        "/api/v1/notes/", headers={"Authorization": f"Bearer {token}"}
+    )
 
     assert response.status_code == 200
     assert len(response.json()) == 1
-    assert response.json() == [{"id": str(note.id), "title": note.title, "content": note.content}]
+    assert response.json() == [
+        {"id": str(note.id), "title": note.title, "content": note.content}
+    ]
 
 
 ######
@@ -86,14 +100,21 @@ async def test_get_note_by_id(
 ):
     user = await create_user(db_session)
 
-    note = Note(title="Test Note", content="This is a test note", user_id=user.id)
+    note = Note(
+        title="Test Note",
+        content="This is a test note",
+        user_id=user.id
+    )
     db_session.add(note)
 
     await db_session.commit()
     await db_session.refresh(note)
 
     token = generate_token(user.id, jwt_manager)
-    response = await client.get(f"/api/v1/notes/{note.id}/", headers={"Authorization": f"Bearer {token}"})
+    response = await client.get(
+        f"/api/v1/notes/{note.id}/",
+        headers={"Authorization": f"Bearer {token}"}
+    )
 
     assert response.status_code == 200
     assert response.json() == {
@@ -114,7 +135,9 @@ async def test_delete_note(
 ):
     user = await create_user(db_session)
 
-    note = Note(title="Test Note", content="This is a test note", user_id=user.id)
+    note = Note(
+        title="Test Note", content="This is a test note", user_id=user.id
+    )
     db_session.add(note)
 
     await db_session.commit()
@@ -122,7 +145,10 @@ async def test_delete_note(
 
     token = generate_token(user.id, jwt_manager)
 
-    response = await client.delete(f"/api/v1/notes/{note.id}/", headers={"Authorization": f"Bearer {token}"})
+    response = await client.delete(
+        f"/api/v1/notes/{note.id}/",
+        headers={"Authorization": f"Bearer {token}"}
+    )
     assert response.status_code == 204
 
     db_session.expunge(note)
@@ -142,10 +168,15 @@ async def test_delete_non_existing_note(
 
     token = generate_token(user.id, jwt_manager)
 
-    response = await client.delete(f"/api/v1/notes/{uuid.uuid4()}/", headers={"Authorization": f"Bearer {token}"})
+    response = await client.delete(
+        f"/api/v1/notes/{uuid.uuid4()}/",
+        headers={"Authorization": f"Bearer {token}"}
+    )
 
     assert response.status_code == 404
-    assert response.json() == {"detail": "Note with the given UUID was not found."}
+    assert response.json() == {
+        "detail": "Note with the given UUID was not found."
+    }
 
 
 @pytest.mark.asyncio
@@ -156,15 +187,15 @@ async def test_update_note(
 ):
     user = await create_user(db_session)
 
-    # Создание заметки
-    note = Note(title="Test Note", content="This is a test note", user_id=user.id)
+    note = Note(
+        title="Test Note", content="This is a test note", user_id=user.id
+    )
     db_session.add(note)
     await db_session.commit()
     await db_session.refresh(note)
 
     token = generate_token(user.id, jwt_manager)
 
-    # Обновление заметки
     new_content = "Updated content"
     response = await client.patch(
         f"/api/v1/notes/{note.id}/",
@@ -175,7 +206,6 @@ async def test_update_note(
     assert response.status_code == 200
     assert response.json()["content"] == new_content
 
-    # Проверяем, что версия заметки была обновлена
     updated_note = await db_session.get(Note, note.id)
     await db_session.refresh(updated_note)
     assert updated_note.content == new_content
