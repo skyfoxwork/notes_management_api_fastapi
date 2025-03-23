@@ -6,7 +6,10 @@
 # Run FastAPI app
 run:
 	uvicorn src.main:app --reload
-# 	uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+
+# Run test (pytest)
+test:
+	python3 -m pytest
 
 # check code with flake8
 lint:
@@ -19,8 +22,19 @@ install:
 # Run Alembic migrations
 migrate:
 	alembic revision --autogenerate
-# 	alembic revision --autogenerate -m "New migration"
 
 # upgrade database schemas
 upgrade:
 	alembic upgrade head
+
+# Rollback of last meetings
+downgrade:
+	alembic downgrade -1
+
+# Building and running Docker containers
+docker-up:
+	docker-compose up --build -d
+
+# Stopping containers
+docker-down:
+	docker-compose down
