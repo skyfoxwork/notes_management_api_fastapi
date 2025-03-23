@@ -1,7 +1,9 @@
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
-from src.config.settings import Settings
 
+from sqlalchemy import text
+
+from src.config.settings import Settings
 from src.main import app
 from src.database.session_sqlite import init_db, get_sqlite_db_contextmanager
 from src.database.session_postgresql import get_db
@@ -44,7 +46,6 @@ async def jwt_manager(settings: Settings):
     )
 
 
-from sqlalchemy import text
 @pytest_asyncio.fixture(autouse=True)
 async def enable_foreign_keys(db_session):
     await db_session.execute(text("PRAGMA foreign_keys = ON;"))
