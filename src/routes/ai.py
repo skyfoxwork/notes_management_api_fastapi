@@ -11,8 +11,14 @@ from src.database.models.notes import Note
 router = APIRouter()
 
 
-@router.get("/{note_id}/", status_code=status.HTTP_200_OK)
-async def get_note_summary(note_id: uuid.UUID, db: AsyncSession = Depends(get_db)):
+@router.get(
+    "/{note_id}/",
+    status_code=status.HTTP_200_OK
+)
+async def get_note_summary(
+        note_id: uuid.UUID,
+        db: AsyncSession = Depends(get_db)
+):
     note = await db.get(Note, note_id)
 
     if not note:
