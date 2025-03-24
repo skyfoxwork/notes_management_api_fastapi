@@ -5,7 +5,47 @@ This is an API for managing notes built with FastAPI.
 It allows you to create, update, delete, and retrieve notes, as well as analyze and summarize them using generative AI models.
 The project uses SQLite and PostgreSQL databases to store data and provides Docker support for containerization.
 
-### Directory Tree
+## Technologies
+
+- Python 3
+- FastAPI
+- Postgresql
+- Sqlite3
+- Docker
+- JWT for authentication
+
+## Features  
+
+### Authentication & Authorization  
+- Secure JWT-based authentication  
+- Password hashing with `bcrypt`  
+- Refresh token support  
+
+### Notes Management  
+- Create, update, and delete notes  
+- Versioning with change history
+
+### AI-Powered Notes Processing  
+- Summarization with Gemini
+
+### Analytics & Statistics  
+- total word count across all notes
+- average note length
+- most common words or phrases
+- identification the top 3 longest and shortest notes
+- Use NumPy, Pandas, or NLTK for this analysis
+
+### RESTful API with Documentation  
+- Swagger UI & ReDoc  
+- Full API test coverage (`pytest`)  
+
+### Scalability & Production-Readiness  
+- Docker containerization  
+- Alembic for database migrations  
+- Supports PostgreSQL & SQLite  
+
+
+## Directory Tree
 
 ```plaintext
 .
@@ -186,8 +226,7 @@ Contains all test cases to ensure the application's reliability and correctness.
 - **`utils.py`**: Test utility.
 ---
 
----
-### **Make commands (Makefile):**
+## **Make commands (Makefile):**
 ```shell
 make run         # Starts the FastAPI server
 make test        # Runs tests
@@ -200,13 +239,15 @@ make docker-down # Builds and starts containers
 
 ```
 ---
+## Instalation
+
 ### **How to Run the Project**
 
 Follow these steps to set up and run the project on your local machine.
 You can run project with 2 ways (with Docker or with Postgres directly)
 
 ---
-## **Run the Project with Docker**
+### **Run the Project with Docker**
 
 Install Python3:
 
@@ -220,7 +261,7 @@ Install Git:
 git-scm.com/
 ```
 
-## **1. Clone the Repository**
+#### **1. Clone the Repository**
 
 Start by cloning the project repository from GitHub:
 
@@ -236,7 +277,7 @@ git checkout develop
 ```
 ---
 
-## **2. Create and Activate a Virtual Environment**
+#### **2. Create and Activate a Virtual Environment**
 
 It is recommended to use a virtual environment to isolate project dependencies:
 
@@ -267,7 +308,7 @@ deactivate
 
 ---
 
-## **3. Install Dependencies with Poetry**
+#### **3. Install Dependencies with Poetry**
 
 ```shell
 pip install -r requirements.txt
@@ -275,7 +316,7 @@ pip install -r requirements.txt
 
 ---
 
-## **4. Create a `.env` File**
+#### **4. Create a `.env` File**
 
 Create a .env file in the root of the project and add the following environment variables:
 
@@ -306,7 +347,7 @@ PGDATA=/var/lib/postgresql/data
 
 ---
 
-## **5. Run the Project with Docker Compose**
+#### **5. Run the Project with Docker Compose**
 
 The project is **Dockerized** for easy setup. To start all the required services (**PostgreSQL, pgAdmin, FastAPI app, MailHog, MinIO, and Alembic migrator**), run:
 
@@ -329,27 +370,7 @@ or
 docker-compose down
 ```
 ---
-
-## **6. Access the Services**
-
-| Service          | URL                             |
-|------------------|---------------------------------|
-| **API**          | `http://localhost:8000/api/v1/` |
-| **Swagger Docs** | `http://localhost:8000/docs`    |
-
----
-
-## **7. Verify Setup**
-
-After all services are running, you can test the API by accessing the **OpenAPI documentation**:
-
-```plaintext
-http://localhost:8000/docs
-```
-
-
----
-## **Run the Project with Postgres directly**
+### **Run the Project with Postgres directly**
 
 Install Python3:
 
@@ -393,7 +414,7 @@ CREATE USER <your_db_user> WITH PASSWORD <your_db_password>;
 
 ```
 
-## **1. Clone the Repository**
+#### **1. Clone the Repository**
 
 Start by cloning the project repository from GitHub:
 
@@ -409,7 +430,7 @@ git checkout develop
 ```
 ---
 
-## **2. Create and Activate a Virtual Environment**
+#### **2. Create and Activate a Virtual Environment**
 
 It is recommended to use a virtual environment to isolate project dependencies:
 
@@ -440,7 +461,7 @@ deactivate
 
 ---
 
-## **3. Install Dependencies with Poetry**
+#### **3. Install Dependencies with Poetry**
 (Linux, MacOS)
 ```bash
 make install
@@ -452,7 +473,7 @@ pip install -r requirements.txt
 
 ---
 
-## **4. Create a `.env` File**
+#### **4. Create a `.env` File**
 
 Create a .env file in the root of the project and add the following environment variables:
 
@@ -483,7 +504,7 @@ PGDATA=/var/lib/postgresql/data
 
 ---
 
-## **5. Run the Project with Postgres directly**
+#### **5. Run the Project with Postgres directly**
 #### Make migrations
 (Linux, MacOS)
 ```bash
@@ -511,26 +532,366 @@ make run
 ```bash
 uvicorn src.main:app --reload
 ```
----
 
-## **6. Access the Services**
-
-| Service          | URL                             |
-|------------------|---------------------------------|
-| **API**          | `http://localhost:8000/api/v1/` |
-| **Swagger Docs** | `http://localhost:8000/docs`    |
-
----
-
-## **7. Verify Setup**
+## Usage
 
 After all services are running, you can test the API by accessing the **OpenAPI documentation**:
 
+Swagger documentation
 ```plaintext
 http://localhost:8000/docs
 ```
+Redoc documentation
+```plaintext
+http://localhost:8000/docs
+```
+___
+### API Endpoints
+### How to user
+This project provides authentication using JWT (JSON Web Token). It includes user registration, login, and token refresh functionality.
 
-# **Testing Project**
+#### Registration Endpoints
+```plaintext
+POST /api/v1/accounts/register/: Register a new user.
+POST /api/v1/accounts/login/: login user.
+POST /api/v1/accounts/refresh/: Get refrash token.
+```
+
+### 1. User Registration
+To register a new user, send a `POST` request to:
+
+**Endpoint:**
+```http
+POST /api/v1/accounts/register/
+```
+
+**Request Body (JSON):**
+```json
+{
+  "email": "user@example.com",
+  "password": "SecurePassword123"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "id": 1,
+  "email": "user@example.com",
+}
+```
+
+---
+
+### 2. User Login (Get Access and Refresh Tokens)
+After successful registration, log in to get authentication tokens.
+
+**Endpoint:**
+```http
+POST /api/v1/accounts/login/
+```
+
+**Request Body (JSON):**
+```json
+{
+  "email": "user@example.com",
+  "password": "SecurePassword123"
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "access_token": "your-access-token",
+  "refresh_token": "your-refresh-token"
+}
+```
+
+- `access_token`: Used for authenticating API requests. It expires after a short period (e.g., 15 minutes).
+- `refresh_token`: Used to get a new `access_token` when it expires.
+
+---
+
+### 3. Using the Access Token
+For protected endpoints, include the **access token** in the `Authorization` header:
+
+**Example Request:**
+```http
+GET /api/v1/protected-resource/ HTTP/1.1
+Host: example.com
+Authorization: Bearer your-access-token
+```
+
+If the token is valid, the request is processed. If expired, request a new token using the refresh token.
+
+---
+
+### 4. Refreshing the Access Token
+When the `access_token` expires, request a new one using the `refresh_token`.
+
+**Endpoint:**
+```http
+POST /api/v1/accounts/refresh/
+```
+
+**Request Body (JSON):**
+```json
+{
+  "refresh_token": "your-refresh-token"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "access_token": "new-access-token"
+}
+```
+
+- Use this new `access_token` in API requests.
+- If the `refresh_token` is expired or invalid, the user must log in again.
+
+---
+
+### Token Expiry Handling
+
+1. If an API request returns `401 Unauthorized` with `{ "detail": "Token has expired" }`, refresh the token.
+2. If refreshing fails, the user must log in again.
+
+---
+
+### Security Recommendations
+- Always store tokens securely (e.g., in HTTP-only cookies or secure storage).
+- Do not expose tokens in URLs.
+- Rotate refresh tokens periodically for better security.
+
+---
+
+### Notes API Usage
+#### Notes Endpoints
+```plaintext
+GET /api/v1/notes/: Get list of user notes.
+POST /api/v1/notes/: Create a new note.
+GET /api/v1/notes/{note_id}/: Retrieve a note by ID.
+PATCH /api/v1/notes/{note_id}/: Update an existing note.
+DELETE /api/v1/notes/{note_id}/: Delete a note by ID.
+```
+
+### 1. Get list of user Notes
+**Endpoint:** `GET /api/v1/notes/`
+
+**Response (200 ok):**
+```json
+  {
+    "title": "first note",
+    "content": "some first content",
+    "id": "d67b62a4-c6d2-4d74-8401-9b5ca7655aef"
+  },
+  {
+    "title": "second note",
+    "content": "some second content",
+    "id": "51a110d2-8eec-4095-882d-12907881142a"
+  }
+```
+
+### 2. Create a New Note
+**Endpoint:** `POST /api/v1/notes/`
+
+**Request Body (JSON):**
+```json
+{
+  "title": "My Note Title",
+  "content": "This is the content of my note."
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "title": "second note",
+  "content": "some second content",
+  "id": "51a110d2-8eec-4095-882d-12907881142a"
+}
+```
+
+---
+
+### 3. Retrieve a Note by ID
+**Endpoint:** `GET /api/v1/notes/{note_id}/`
+
+**Example Request:**
+```http
+GET /api/v1/notes/123e4567-e89b-12d3-a456-426614174000/ HTTP/1.1
+Host: example.com
+Authorization: Bearer your-access-token
+```
+
+**Response (200 OK):**
+```json
+{
+  "title": "Text",
+  "content": "some content",
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "created_at": "2025-03-24T14:28:27.008Z",
+  "updated_at": "2025-03-24T14:28:27.008Z",
+  "versions": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "version": 1,
+      "content": "string",
+      "created_at": "2025-03-24T14:28:27.008Z"
+    },
+    {
+      "id": "3fa85f64-5717-456d-b3fc-2c963f66ffl8",
+      "version": 2,
+      "content": "next content",
+      "created_at": "2025-03-24T14:28:27.008Z"
+    }
+  ]
+}
+```
+
+---
+
+### 3. Update an Existing Note
+**Endpoint:** `PATCH /api/v1/notes/{note_id}/`
+**Example Request:**
+```http
+PATCH /api/v1/notes/123e4567-e89b-12d3-a456-426614174000/ HTTP/1.1
+Host: example.com
+Authorization: Bearer your-access-token
+```
+
+**Request Body (JSON):**
+```json
+{
+  "content": "Updated note content."
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "title": "first note",
+  "content": "new content",
+  "id": "d67b62a4-c6d2-4d74-8401-9b5ca7655aef"
+}
+```
+
+- All old notes will store in version table of database (VersionNote).
+---
+### 4. Delete a Note by ID
+**Endpoint:** `DELETE /api/v1/notes/{note_id}/`
+
+**Example Request:**
+```http
+DELETE /api/v1/notes/123e4567-e89b-12d3-a456-426614174000/ HTTP/1.1
+Host: example.com
+Authorization: Bearer your-access-token
+```
+---
+## AI Summarization API Usage
+#### AI Summarization Endpoints
+```plaintext
+GET /api/v1/summarize/{note_id}/:Get an AI-generated summary of a note using Gemini.
+```
+
+### Get an AI-Generated Summary of a Note
+**Endpoint:** `GET /api/v1/summarize/{note_id}/`
+
+**Example Request:**
+```http
+GET /api/v1/summarize/123e4567-e89b-12d3-a456-426614174000/ HTTP/1.1
+Host: example.com
+Authorization: Bearer your-access-token
+```
+
+**Response (200 OK):**
+```json
+{
+  "id": "uuid-string",
+  "summary": "This is the AI-generated summary of your note."
+}
+```
+
+---
+
+## Analytics API Usage
+
+#### Analytics Endpoints
+```plaintext
+GET /api/v1/analytics/: Get analytics data such as word count, average note length, most common words, and top longest/shortest notes.
+```
+
+### Get Analytics Data
+**Endpoint:** `GET /api/v1/analytics/`
+
+**Example Request:**
+```http
+GET /api/v1/analytics/ HTTP/1.1
+Host: example.com
+Authorization: Bearer your-access-token
+```
+
+**Response (200 OK):**
+```json
+{
+  "total_word_count": 15,
+  "average_note_length": 3.75,
+  "most_common_words": [
+    [
+      "new",
+      3
+    ],
+    [
+      "text",
+      2
+    ],
+    [
+      "content",
+      2
+    ],
+    [
+      "tell",
+      1
+    ],
+    [
+      "bird",
+      1
+    ]
+  ],
+  "top_3_longest_notes": [
+    {
+      "id": "bed2f6d3-d2f6-49d3-886b-bbccb85d0587",
+      "word_count": 6
+    },
+    {
+      "id": "6a0faeee-235f-4e22-9cc9-cab23b58f615",
+      "word_count": 4
+    },
+    {
+      "id": "51a110d2-8eec-4095-882d-12907881142a",
+      "word_count": 3
+    }
+  ],
+  "top_3_shortest_notes": [
+    {
+      "id": "d67b62a4-c6d2-4d74-8401-9b5ca7655aef",
+      "word_count": 2
+    },
+    {
+      "id": "51a110d2-8eec-4095-882d-12907881142a",
+      "word_count": 3
+    },
+    {
+      "id": "6a0faeee-235f-4e22-9cc9-cab23b58f615",
+      "word_count": 4
+    }
+  ]
+}
+```
+---
+## Testing
 
 ```shell
 make test
