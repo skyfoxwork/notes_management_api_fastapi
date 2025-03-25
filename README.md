@@ -258,7 +258,19 @@ www.python.org/
 Install Git:
 
 ```shell
-git-scm.com/
+https://git-scm.com/
+```
+
+Install Docker:
+
+```shell
+https://www.docker.com/
+```
+
+Create you gemini key:
+
+```shell
+https://aistudio.google.com/
 ```
 
 #### **1. Clone the Repository**
@@ -325,13 +337,14 @@ Create .env file
 cp .env.sample .env
 ```
 
+add <your_gemini_key> to .env.
 ```env
-# PostgreSQL
-POSTGRES_DB_NAME=<your_db_name>
-POSTGRES_DB_PORT=5432
-POSTGRES_USER=<your_db_user>
-POSTGRES_PASSWORD=<your_db_password>
-POSTGRES_HOST=<your_db_host>
+# PostgreSQL Docker
+POSTGRES_DB=notes_management_api_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=password
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
 
 # Gemini
 GEMINI_API_KEY=<your_gemini_key>
@@ -340,16 +353,13 @@ GEMINI_API_KEY=<your_gemini_key>
 SECRET_KEY_ACCESS=838qKq7dGp34hWij3c8txA5ZD2qm9ybt
 SECRET_KEY_REFRESH=cFzRk8kllHMW71wQKLXBqDzl24fkhisw
 JWT_SIGNING_ALGORITHM=HS256
-
-# Docker
-PGDATA=/var/lib/postgresql/data
 ```
 
 ---
 
 #### **5. Run the Project with Docker Compose**
 
-The project is **Dockerized** for easy setup. To start all the required services (**PostgreSQL, pgAdmin, FastAPI app, MailHog, MinIO, and Alembic migrator**), run:
+The project is **Dockerized** for easy setup. To start all the required services (**PostgreSQL, FastAPI app and Alembic migrator**), run:
 
 (Linux, MacOS)
 ```bash
@@ -360,7 +370,7 @@ or
 ```bash
 docker-compose up --build
 ```
-#### Stop project
+#### **6. Stop Project**
 ```bash
 make docker-down
 ```
@@ -387,6 +397,12 @@ git-scm.com/
 Install postgres
 ```shell
 www.postgresql.org
+```
+
+Create you gemini key:
+
+```shell
+https://aistudio.google.com/
 ```
 
 Create database (postgres)
@@ -482,13 +498,14 @@ Create .env file
 cp .env.sample .env
 ```
 
+Change .env file with you data.
 ```env
-# PostgreSQL
-POSTGRES_DB_NAME=<your_db_name>
-POSTGRES_DB_PORT=5432
+# PostgreSQL Docker
+POSTGRES_DB=<your_db_name>
 POSTGRES_USER=<your_db_user>
 POSTGRES_PASSWORD=<your_db_password>
 POSTGRES_HOST=<your_db_host>
+POSTGRES_PORT=5432
 
 # Gemini
 GEMINI_API_KEY=<your_gemini_key>
@@ -497,9 +514,6 @@ GEMINI_API_KEY=<your_gemini_key>
 SECRET_KEY_ACCESS=838qKq7dGp34hWij3c8txA5ZD2qm9ybt
 SECRET_KEY_REFRESH=cFzRk8kllHMW71wQKLXBqDzl24fkhisw
 JWT_SIGNING_ALGORITHM=HS256
-
-# Docker
-PGDATA=/var/lib/postgresql/data
 ```
 
 ---
