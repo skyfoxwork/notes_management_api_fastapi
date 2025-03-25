@@ -13,10 +13,10 @@ class Settings(BaseSettings):
     POSTGRES_DB_PORT: int = int(os.getenv("POSTGRES_PORT", 5432))
     POSTGRES_DB: str = os.getenv("POSTGRES_DB", "test_db")
 
-    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", os.urandom(32))
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", os.urandom(32).hex())
 
-    SECRET_KEY_ACCESS: str = os.getenv("SECRET_KEY_ACCESS", os.urandom(32))
-    SECRET_KEY_REFRESH: str = os.getenv("SECRET_KEY_REFRESH", os.urandom(32))
+    SECRET_KEY_ACCESS: str = os.getenv("SECRET_KEY_ACCESS", os.urandom(32).hex())
+    SECRET_KEY_REFRESH: str = os.getenv("SECRET_KEY_REFRESH", os.urandom(32).hex())
     JWT_SIGNING_ALGORITHM: str = os.getenv("JWT_SIGNING_ALGORITHM", "HS256")
 
     LOGIN_TIME_DAYS: int = 7
