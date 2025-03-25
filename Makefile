@@ -7,6 +7,9 @@
 run:
 	uvicorn src.main:app --reload
 
+run-hp:
+	uvicorn src.main:app --host 0.0.0.0 --port 8000
+
 # Run test (pytest)
 test:
 	python3 -m pytest
@@ -33,6 +36,9 @@ downgrade:
 
 # Building and running Docker containers
 docker-up:
+	docker-compose up --build
+
+docker-up-bg:
 	docker-compose up --build -d
 
 # Stopping containers
