@@ -22,7 +22,9 @@ async def get_note_summary(
     note = await db.get(Note, note_id)
 
     if not note:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Not found"
+        )
 
     prompt = f"Summarize this note: {note.content}"
     response = await get_summarize_note_genai(prompt)

@@ -8,7 +8,12 @@ from sqlalchemy.sql.functions import coalesce
 
 from src.database.session_postgresql import get_db
 from src.database.models.notes import Note, NoteVersion
-from src.schemas.notes import NoteCreateSchema, NoteSchema, NoteSchemaDetail, NoteUpdateVersionCreateSchema
+from src.schemas.notes import (
+    NoteCreateSchema,
+    NoteSchema,
+    NoteSchemaDetail,
+    NoteUpdateVersionCreateSchema
+)
 from src.security.token_manager import JWTAuthManagerInterface
 from src.config.dependencies import get_jwt_auth_manager
 from src.security.http import get_token
@@ -34,7 +39,9 @@ async def get_list_of_notes(
     notes = db_result.scalars().all()
 
     if not notes:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No notes found.")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="No notes found."
+        )
 
     return notes
 
@@ -60,7 +67,9 @@ async def get_note_by_id(
     note = db_result.scalars().first()
 
     if not note:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Not found"
+        )
 
     return note
 
@@ -93,7 +102,9 @@ async def delete_note(
 ):
     user_id = get_user_id_or_unauthorized(jwt_manager=jwt_manager, token=token)
 
-    result = await db.execute(delete(Note).where(Note.id == note_id, Note.user_id == user_id))
+    result = await db.execute(delete(Note).where(
+        Note.id == note_id, Note.user_id == user_id)
+    )
 
     if result.rowcount == 0:
         raise HTTPException(
@@ -104,7 +115,11 @@ async def delete_note(
     await db.commit()
 
 
-@router.patch("/{note_id}/", response_model=NoteSchema, status_code=status.HTTP_200_OK)
+@router.patch(
+    "/{note_id}/",
+    response_model=NoteSchema,
+    status_code=status.HTTP_200_OK
+)
 async def update_note(
         data: NoteUpdateVersionCreateSchema,
         note_id: uuid.UUID,
@@ -117,7 +132,9 @@ async def update_note(
     note = await db.get(Note, note_id)
 
     if not note:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Not found"
+        )
 
     if note.content == data.content:
         return {"detail": "content not changed"}

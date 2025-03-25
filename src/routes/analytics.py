@@ -16,7 +16,9 @@ async def get_notes_analytics(db: AsyncSession = Depends(get_db)):
     notes = result.scalars().all()
 
     if not notes:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Not found"
+        )
 
     analyze_data = await get_analyze_notes(notes)
 

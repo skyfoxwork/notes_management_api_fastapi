@@ -249,7 +249,9 @@ async def refresh_access_token(
     a new access token. If the token is invalid or expired, an error is returned.
     """
     try:
-        decoded_token = jwt_manager.decode_refresh_token(token_data.refresh_token)
+        decoded_token = jwt_manager.decode_refresh_token(
+            token_data.refresh_token
+        )
         user_id = decoded_token.get("user_id")
     except BaseSecurityError as error:
         raise HTTPException(
