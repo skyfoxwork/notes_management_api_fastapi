@@ -5,7 +5,14 @@ from src.routes.ai import router as ai_router
 from src.routes.analytics import router as analytics_router
 from src.routes.accounts import router as accounts_router
 
+
 app = FastAPI(title="Notes Management API", description="Project description")
+
+
+@app.get("/")
+def health():
+    return {"status": "ok"}
+
 
 api_version_prefix = "/api/v1"
 
