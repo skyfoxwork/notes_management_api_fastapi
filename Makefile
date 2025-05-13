@@ -43,6 +43,10 @@ docker-up-v1:
 docker-up-bg-v1:
 	docker-compose up --build -d
 
+# Stopping containers v2
+docker-down-v1:
+	docker-compose down
+
 # Building and running Docker containers v2
 # with output log in terminal
 docker-up:
@@ -52,6 +56,6 @@ docker-up:
 docker-up-bg:
 	docker compose up --build -d
 
-# Stopping containers
+# Stopping containers v2
 docker-down:
-	docker-compose down
+	docker compose down
