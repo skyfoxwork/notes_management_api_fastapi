@@ -34,12 +34,23 @@ upgrade:
 downgrade:
 	alembic downgrade -1
 
-# Building and running Docker containers
-docker-up:
+# Building and running Docker containers v1
+# with output log in terminal
+docker-up-v1:
 	docker-compose up --build
 
-docker-up-bg:
+# background mode (without output log in terminal)
+docker-up-bg-v1:
 	docker-compose up --build -d
+
+# Building and running Docker containers v2
+# with output log in terminal
+docker-up:
+	docker compose up --build
+
+# background mode (without output log in terminal)
+docker-up-bg:
+	docker compose up --build -d
 
 # Stopping containers
 docker-down:
